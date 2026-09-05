@@ -10,7 +10,7 @@ Current Status: **Role-Based JWT Authentication & Authorization Implemented**
 
 * **RBAC:** An `admin` middleware enforces privilege separation:
    * **Admin:** Can create and register Operator accounts.
-   * **Operator:** Restricted from creating accounts; can log in.
+   * **Operator:** Restricted from creating accounts; can log in / logout.
 
 ---
 
