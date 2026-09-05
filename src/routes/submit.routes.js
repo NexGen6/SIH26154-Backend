@@ -9,5 +9,7 @@ const router = express.Router();
 
 router.post('/submission', authMiddleware, validateSubmission, subController.createSubmission);
 
+router.get('/mySubmissions', authMiddleware, subController.getMySubmissions);
+
 
 module.exports = router;

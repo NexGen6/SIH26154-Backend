@@ -2,22 +2,31 @@
 
 Backend service for the **Smart India Hackathon (SIH) 2026** project by team **NextGen6**, built with **Node.js**, **Express**, and **MongoDB**.
 
-**Current Status:** Authentication, Authorization & Submission Validation Implemented
+**Current Status:** Authentication, Authorization, Submission Validation , Output & Gemini AI Integration Implemented.
 
 ## Key Features & Workflow
 
 ### 1. Authentication & Authorization (RBAC)
-An admin middleware enforces strict privilege separation:
-* **Admin:** Full access to system administration. Can create, manage, and register Operator accounts.
-* **Operator:** Access restricted to daily operational tasks. Restricted from creating accounts; can log in and log out.
 
-### 2. Submission Validation
-Ensures data integrity and compliance before records are saved to the database:
+An admin middleware enforces strict privilege separation:
+
+* **Admin:** Full access to system administration. Can create, manage, and register Operator accounts.
+* **Operator:** Access restricted to daily operational tasks. Restricted from creating accounts; can log in, execute operational tasks, and securely log out.
+
+### 2. Submission & Output Validation
+
+Ensures data integrity and compliance before records are processed or saved to the database:
+
 * Validates incoming payload structures against required schemas.
 * Sanitizes input to prevent malformed data entry.
+* Formats and validates generated output payloads.
 * Rejects incomplete or invalid operator submissions with appropriate HTTP error codes.
 
----
+### 3. Gemini AI File Transformation
+
+Integrates Google's Gemini AI API to handle file transformations and intelligent content processing:
+
+* Current Status : In testing phase using test-ai.js for input
 
 ## Getting Started
 
@@ -40,9 +49,8 @@ Ensures data integrity and compliance before records are saved to the database:
    PORT=YOUR_PORT_NUMBER
    MONGO_URI=YOUR_MONGODB_CONNECTION_STRING
    JWT_SECRET=YOUR_JWT_SECRET_KEY
+   GEMINI_API_KEY=YOUR_GEMINI_AI_API_KEY
    ```
-
----
 
 ## Running the Server
 

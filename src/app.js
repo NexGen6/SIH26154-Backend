@@ -2,6 +2,7 @@ const express = require('express');
 const cookieParser = require('cookie-parser');
 const authRoutes = require('./routes/auth.routes');
 const submissionRoutes = require('./routes/submit.routes');
+const outputRoutes = require('./routes/output.routes');
 
 
 const app = express();
@@ -10,11 +11,12 @@ app.use(express.json());
 
 app.get('/' , (req, res) => {
      res.send('server is ready')
-})
+});
 
-app.use('/api/auth' , authRoutes);
+app.use('/api/auth', authRoutes);
 
 app.use('/api', submissionRoutes);
 
+app.use('/api', outputRoutes);
 
 module.exports = app 

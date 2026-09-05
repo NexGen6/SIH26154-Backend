@@ -17,6 +17,18 @@ async function createSubmission(req, res) {
      });
 }
 
+async function getMySubmissions(req, res) {
+
+     const submissions = await submitModel.find({
+          user: req.user.id
+     });
+
+     res.status(200).json({
+          submissions
+     });
+}
+
 module.exports = {
-     createSubmission
+     createSubmission,
+     getMySubmissions
 }
