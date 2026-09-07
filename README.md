@@ -8,7 +8,7 @@ Backend service for the **Smart India Hackathon (SIH) 2026** project by team **N
 
 ### 1. Authentication & Authorization (RBAC)
 An admin middleware enforces strict privilege separation:
-* **Admin:** Full access to system administration. Can create, manage, and register Operator accounts.
+* **Admin:** Full access to system administration. Can create, manage, view and register Operator accounts.
 * **Operator:** Access restricted to daily operational tasks. Restricted from creating accounts; can log in, execute operational tasks, and securely log out.
 
 ### 2. Submission & Output Validation
@@ -21,9 +21,12 @@ Ensures data integrity and compliance before records are processed or saved to t
 ### 3. Dynamic Gemini AI Prompt Engineering
 Integrates Google's Gemini AI API with a powerful context-customization layer. Operators can now customize generation parameters on the fly:
 * **Custom Prompts:** Pass custom instructions directly to the model alongside data payloads.
-* **Tone Control:** Tailor responses to specific styles (e.g., professional, casual, analytical, technical).
+* **Tone Control:** Tailor responses to specific styles (e.g., professional , casual, analytical, technical).
 * **Target Audience Optimization:** Adjust the complexity and vocabulary of the output based on who will read it.
 * **Localization & Language:** Generate outputs natively in multiple user-specified languages.
+
+### 4. Audit Log System for Content Transformation AI Engine
+A centralized, asynchronous Audit Log System designed to track, monitor, and record all data lifecycle stages, model inferences, and user interactions within the Content Transformation AI Engine. This system ensures full compliance, security monitoring, and debugging capabilities by capturing deterministic records of how content is transformed
 
 ## Getting Started
 

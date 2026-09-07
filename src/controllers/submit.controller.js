@@ -1,6 +1,7 @@
 const submitModel = require('../models/submit.model');
 const outputModel = require('../models/output.model');
 const { generateContent } = require('../services/ai.service');
+const auditModel = require('../models/audit.model');
 
 
 async function createSubmission(req, res) {
@@ -17,6 +18,14 @@ async function createSubmission(req, res) {
           detailLevel,
           objective,
           status: "processing"
+     });
+
+     await auditModel.create({
+          user: req.user.id,
+          action: "CREATE_SUBMISSION",
+          resource: "Submission",
+          resourceId: submission._id,
+          details: `Created Submission with outputs: ${outputTypes.join(", ")}`
      });
 
      try {
