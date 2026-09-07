@@ -2,31 +2,28 @@
 
 Backend service for the **Smart India Hackathon (SIH) 2026** project by team **NextGen6**, built with **Node.js**, **Express**, and **MongoDB**.
 
-**Current Status:** Authentication, Authorization, Submission Validation , Output & Gemini AI Integration Implemented.
+**Current Status:** Authentication, Authorization, Advanced Submission Validation, Dynamic Prompt Engineering, and Gemini AI Integration Implemented.
 
 ## Key Features & Workflow
 
 ### 1. Authentication & Authorization (RBAC)
-
 An admin middleware enforces strict privilege separation:
-
 * **Admin:** Full access to system administration. Can create, manage, and register Operator accounts.
 * **Operator:** Access restricted to daily operational tasks. Restricted from creating accounts; can log in, execute operational tasks, and securely log out.
 
 ### 2. Submission & Output Validation
-
 Ensures data integrity and compliance before records are processed or saved to the database:
-
 * Validates incoming payload structures against required schemas.
 * Sanitizes input to prevent malformed data entry.
 * Formats and validates generated output payloads.
 * Rejects incomplete or invalid operator submissions with appropriate HTTP error codes.
 
-### 3. Gemini AI File Transformation
-
-Integrates Google's Gemini AI API to handle file transformations and intelligent content processing:
-
-* Current Status : AI generation connected to to submissions.
+### 3. Dynamic Gemini AI Prompt Engineering
+Integrates Google's Gemini AI API with a powerful context-customization layer. Operators can now customize generation parameters on the fly:
+* **Custom Prompts:** Pass custom instructions directly to the model alongside data payloads.
+* **Tone Control:** Tailor responses to specific styles (e.g., professional, casual, analytical, technical).
+* **Target Audience Optimization:** Adjust the complexity and vocabulary of the output based on who will read it.
+* **Localization & Language:** Generate outputs natively in multiple user-specified languages.
 
 ## Getting Started
 
@@ -61,4 +58,6 @@ Integrates Google's Gemini AI API to handle file transformations and intelligent
 * **Production Mode:**
   ```bash
   npm start
+  ```
+
   ```

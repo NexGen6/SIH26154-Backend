@@ -13,6 +13,31 @@ const validateSubmission = [
   body('outputTypes')
     .isArray({ min: 1 })
     .withMessage("At least one output is required"),
+
+  body('audience')
+    .trim()
+    .notEmpty()
+    .withMessage("Audience is required"),
+
+  body('tone')
+    .trim()
+    .notEmpty()
+    .withMessage("Tone is required"),
+
+  body('language')
+    .trim()
+    .notEmpty()
+    .withMessage("Language is required"),
+
+  body('detailLevel')
+    .trim()
+    .notEmpty()
+    .withMessage("Detail level is required"),
+
+  body('objective')
+    .trim()
+    .notEmpty()
+    .withMessage("Objective is required"),
     
   (req, res, next) => {
 

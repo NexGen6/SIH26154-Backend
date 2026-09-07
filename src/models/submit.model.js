@@ -6,12 +6,12 @@ const submitSchema = new mongoose.Schema(
           user: {
                type: mongoose.Schema.Types.ObjectId,
                ref: "User",
-               required: "true"
+               required: true,
           },
           sourceType: {
                type: String,
                enum: ["text", "document", "url"],
-               required: true
+               required: true,
           },
           content: {
                type: String,
@@ -21,10 +21,30 @@ const submitSchema = new mongoose.Schema(
                type: [String],
                required: true,
           },
+          audience: {
+               type: String,
+               required: true,
+          },
+          tone: {
+               type: String,
+               required: true,
+          },
+          language: {
+               type: String,
+               required: true,
+          },
+          detailLevel: {
+               type: String,
+               required: true,
+          },
+          objective: {
+               type: String,
+               required: true,
+          },
           status: {
                type: String,
                enum: ["pending", "processing", "completed", "failed"],
-               default: "pending"
+               default: "pending",
           }
      },
      {

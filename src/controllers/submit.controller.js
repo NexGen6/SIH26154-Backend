@@ -4,13 +4,18 @@ const { generateContent } = require('../services/ai.service');
 
 
 async function createSubmission(req, res) {
-     const { sourceType, content , outputTypes } = req.body;
+     const { sourceType, content , outputTypes , audience , tone , language , detailLevel , objective } = req.body;
 
      const submission = await submitModel.create({
           user: req.user.id,
           sourceType,
           content,
           outputTypes,
+          audience,
+          tone,
+          language,
+          detailLevel,
+          objective,
           status: "processing"
      });
 
@@ -22,6 +27,11 @@ async function createSubmission(req, res) {
                const generatedContent = await generateContent(
                     content,
                     outputType,
+                    audience,
+                    tone,
+                    language,
+                    detailLevel,
+                    objective
                );
 
                const output = await outputModel.create({
