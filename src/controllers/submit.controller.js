@@ -2,15 +2,28 @@ const submitModel = require('../models/submit.model');
 const outputModel = require('../models/output.model');
 const { generateContent } = require('../services/ai.service');
 const auditModel = require('../models/audit.model');
+const { extractTextFromPDF } = require('../services/pdf.service');
 
 
 async function createSubmission(req, res) {
      const { sourceType, content , outputTypes , audience , tone , language , detailLevel , objective } = req.body;
 
+     let sourceContent = content;
+
+     if(sourceType === 'document') {
+          sourceContent = await extractTextFromPDF(req.file.buffer);
+
+          if(!sourceContent.trim()) {
+               return res.json({
+                    message: "Could not extract text from PDF"
+               });
+          }
+     }
+
      const submission = await submitModel.create({
           user: req.user.id,
           sourceType,
-          content,
+          content: sourceContent,
           outputTypes,
           audience,
           tone,
@@ -34,7 +47,7 @@ async function createSubmission(req, res) {
           for(const outputType of outputTypes) {
 
                const generatedContent = await generateContent(
-                    content,
+                    sourceContent,
                     outputType,
                     audience,
                     tone,

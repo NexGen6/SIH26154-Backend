@@ -4,12 +4,7 @@ const validateSubmission = [
   body('sourceType')
     .isIn(["text", "document", "url"])
     .withMessage("Invalid Source Type"),
-    
-  body('content')
-    .trim()
-    .notEmpty()
-    .withMessage("Content is required"),
-    
+  
   body('outputTypes')
     .isArray({ min: 1 })
     .withMessage("At least one output is required"),
@@ -45,6 +40,18 @@ const validateSubmission = [
 
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
+    }
+
+    if(req.body.sourceType === 'document' && !req.file) {
+      return res.status(400).json({
+        message: "PDF file is required for document source",
+      });
+    }
+
+    if(req.body.sourceType === 'text' && !req.body.content) {
+      return res.status(400).json({
+        message: 'Content is required for text source',
+      });
     }
 
     next();
