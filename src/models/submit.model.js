@@ -10,7 +10,7 @@ const submitSchema = new mongoose.Schema(
           },
           sourceType: {
                type: String,
-               enum: ["text", "document", "url"],
+               enum: ["text", "document", "image", "url"],
                required: true,
           },
           content: {

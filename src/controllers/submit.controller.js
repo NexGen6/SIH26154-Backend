@@ -3,6 +3,7 @@ const outputModel = require('../models/output.model');
 const { generateContent } = require('../services/ai.service');
 const auditModel = require('../models/audit.model');
 const { extractTextFromPDF } = require('../services/pdf.service');
+const { extractTextFromDOCX } = require('../services/docx.service');
 
 
 async function createSubmission(req, res) {
@@ -11,13 +12,24 @@ async function createSubmission(req, res) {
      let sourceContent = content;
 
      if(sourceType === 'document') {
-          sourceContent = await extractTextFromPDF(req.file.buffer);
+          
+          if(req.file.mimetype === "application/pdf") {
+               sourceContent = await extractTextFromPDF(req.file.buffer);
+
+          }else if(req.file.mimetype === "application/vnd.openxmlformats-officedocument.wordprocessingml.document") {
+
+               sourceContent = await extractTextFromDOCX(req.file.buffer);
+          }
 
           if(!sourceContent.trim()) {
-               return res.json({
-                    message: "Could not extract text from PDF"
+               return res.status(400).json({
+                    message: "Could not extract text from the document"
                });
           }
+     }
+
+     if(sourceType === 'image') {
+          sourceContent = "[Image Input]";
      }
 
      const submission = await submitModel.create({
@@ -53,7 +65,8 @@ async function createSubmission(req, res) {
                     tone,
                     language,
                     detailLevel,
-                    objective
+                    objective,
+                    sourceType === "image" ? req.file : null
                );
 
                const output = await outputModel.create({
