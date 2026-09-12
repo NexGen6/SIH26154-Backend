@@ -4,6 +4,7 @@ const authRoutes = require('./routes/auth.routes');
 const submissionRoutes = require('./routes/submit.routes');
 const outputRoutes = require('./routes/output.routes');
 const adminRoutes = require('./routes/admin.routes');
+const errorMiddleware = require('./middlewares/error.middleware');
 
 
 const app = express();
@@ -21,5 +22,7 @@ app.use('/api', submissionRoutes);
 app.use('/api', outputRoutes);
 
 app.use('/api', adminRoutes);
+
+app.use(errorMiddleware);
 
 module.exports = app 
