@@ -4,7 +4,7 @@ const outputSchema = new mongoose.Schema(
      {
           submission: {
                type: mongoose.Schema.Types.ObjectId,
-               ref: "Submission",
+               ref: "Submit",
                required: true
           },
           type: {

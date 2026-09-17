@@ -1,95 +1,92 @@
 # SIH 2026 PS 154 Backend | NexGen6
 
-The backend engine for the **Smart India Hackathon (SIH) 2026** (Problem Statement 154), built by team **NexGen6**. 
+SIH26154 Backend built by the team **NexGen6** using **Node.js, Express, and MongoDB (Mongoose)**. This engine enables users to ingest multimodal source materials (Text, PDFs, Word documents, or Images) and simultaneously transform them into various tailored marketing, editorial, and executive outputs using the **Google Gemini API**.
 
-This system handles secure, high-throughput, multimodal content transformation using Node.js, Express, MongoDB, and Google Gemini AI.
-
----
-
-## Key Features & Capabilities
-
-### 1. Engine Security, Validation & Error Management
-Advanced control layers built to harden engine prompts, validate ingestion structures, and gracefully catch system failures.
-*   **File Output Type Limiting:** Enforces strict compliance checks on generation output targets, ensuring files are constrained strictly to authorized formats.
-*   **Deep Request Validation:** Intercepts incoming client payloads via structured validation schemas to neutralize malformed data before pipeline execution.
-*   **Prompt Hardening Architecture:** Wraps AI orchestrations in robust defensive prompt schemas designed to block adversarial prompt injections and maintain execution alignment.
-*   **Global Error Handling Layer:** Captures unexpected application exceptions through a centralized middleware.
-
-### 2. Authentication & Enterprise-Grade Authorization (RBAC)
-Secure, session-less identity verification layout built to defend administrative control points.
-*   **JWT & Cookie Security:** Implements JWT-driven authorization packaged inside secure, cross-site scripting (XSS) resistant HTTP-only cookies.
-*   **Session Verification:** Features a `/me` contextual lifecycle endpoint to instantly validate client-side login persistence.
-*   **Role-Based Privilege Separation:**
-    *   **Admin:** Full-tier system access, exclusive right to trigger user account creation, and complete administrative lifecycle management over all roles.
-    *   **Operator:** Constrained permissions optimized for standard data pipelines and execution actions. Strictly banned from account registration operations.
-
-### 3. Multi-Format Input & Ingestion Pipeline
-A robust ingestion engine that decouples unstructured asset processing from server memory limits.
-*   **Structured Text & Document Parsing:** Native processing tracks for direct text payloads alongside deep structural extractors for `.pdf` and `.docx` assets.
-*   **Direct Multimodal Vision Ingestion:** Intercepts `.png`, `.jpeg`, and `.webp` binaries via automated edge filters. Passes raw image matrices straight to Gemini's native vision model, avoiding rigid, text-only external OCR wrappers.
-*   **Unified Pipeline Harmonization:** Normalises data matrices across disparate media types into a uniform context schema before prompting the core engine.
-
-### 4. Asynchronous Submission & State Management
-Fault-tolerant processing workflow designed to handle high-frequency concurrent operations without data dropping.
-*   **Stateful Lifecycle Machine:** Automatically routes submitted objects across predictable transactional status phases: `Pending` ➔ `Processing` ➔ `Completed` / `Failed`.
-*   **One-to-Many Asset Multiplicity:** Allows a singular, raw source submission to trigger and spawn a massive range of independent transformation operations simultaneously.
-*   **Historical Retrieval Traces:** Persists deep contextual history trails, granting active users quick access to their past submission pipelines.
-
-### 5. Context-Driven Gemini AI Transformation Engine
-Advanced framework layout that wraps system inputs in user-tailored instructions.
-*   **Multi-Artifact Asset Spawning:** Leverages native prompt engineering strategies to split one multi-modal context cluster into several distinct target files.
-*   **Granular Context Matrixing:** Injects real-time customizable matrices directly inside the system prompt:
-    *   **Target Audience:** Scales complexity curves from public summaries up to technical reviews.
-    *   **Stylistic Tone:** Controls output voice settings (e.g., casual, technical, corporate).
-    *   **Language Localization:** Translates and structures generation natively across different target regions.
-    *   **Detail Level & Core Objective:** Manages content length density alongside core functional milestones.
-
-### 6. Asynchronous Audit Logging & Storage Layout
-Strict, real-time logging infrastructure keeping transparent records of system events.
-*   **Immutable Lifespan Audit:** Non-blocking tracking layers record structural system events, security check steps, and model behaviors immediately.
-*   **Privileged Dashboard Access:** Grants root Admins end-to-end trace views over operational patterns for performance auditing and debug actions.
-*   **Linked Mongo Data Fabric:** Maps generated outputs directly back to source documents within the DB, facilitating fast querying of individual user submission histories.
+The architecture strictly adheres to standard software engineering patterns, decoupling routing, controller logic, service execution, and database modeling.
 
 ---
 
-## Tech Stack
+##  Key Features & Capabilities
 
-*   **Runtime Environment:** Node.js
-*   **Application Framework:** Express.js
-*   **Database Management:** MongoDB (Mongoose ODM)
-*   **Intelligence Orchestration:** Google Gemini AI API SDK
-*   **File Processing Core:** Multer Engine & File-Specific Structural Parsers
+###  Authentication, Authorization & Security
+*   **Secure Cookie-Based JWT:** Custom authentication flow utilizing HTTP-only cookies to mitigate XSS vulnerabilities.
+*   **Database-Backed Role Verification:** Role checks (`admin` and `operator`) are actively queried against MongoDB in the `authMiddleware` to completely block client-side JWT role manipulation or privilege escalation.
+*   **Administrative Control:** Admins can dynamically create isolated `operator` accounts with distinct role restrictions.
+*   **Strict Cryptography & Sanitization:** Implements `bcrypt` for one-way password hashing, automated text trimming, email lowercasing, and enforces mandatory minimum password lengths. Passwords are strictly excluded from database responses.
 
+###  Multimodal Content Submission Engine
+*   **Diverse Ingestion Formats:** Natively processes **Text inputs, PDFs, DOCX files, and Images (JPEG, PNG, WEBP)**.
+*   **One-to-Many Generation Pipeline:** Processes a single upload into multiple distinct outputs simultaneously (e.g., generating a LinkedIn Post, Twitter/X Thread, Policy Advisory, Infographic outline, Executive Summary, and Presentation deck in a single request).
+*   **Dynamic Engineering Variables:** Supports fine-grained customization per submission:
+    *   Target Audience
+    *   Brand Tone & Language
+    *   Detail Level & Communication Objective
 
-## Getting Started
+###  Advanced Document & Image Processing
+*   **In-Memory Buffer Handling:** Uses `Multer` memory storage to efficiently parse binary data without caching debris on the local server disk.
+*   **Text Ingestion Engines:** Uses `pdf-parse` for automated PDF text extraction and `mammoth` for DOCX structural scraping.
+*   **Native Vision Support:** Directly pipes image binary buffers via Base64 strings to Google Gemini's multimodal vision model. 
+*   **Optimized Storage Model:** Keeps the MongoDB cluster lightweight by cataloging an `[IMAGE INPUT]` string placeholder rather than storing large raw binary assets.
 
-### Installation & Setup
+###  Gemini API Security & Prompt Hardening
+The core `generateContent()` service contains explicit structural counter-prompts to sanitize all user uploads before execution, hardening the system against:
+*   **Prompt Injections:** Neutralizes instructions hidden maliciously inside user source materials.
+*   **System Overrides:** Prevents inputs from attempting to wipe or override predefined application bounds.
+*   **Credential/Leak Protection:** Actively blocks attempts to extract system prompts, configurations, or internal API keys.
+*   **Formatting Rules:** Controls structural outputs to eliminate hallucinated information and suppress unwanted emoji usage.
 
-1. **Clone the repository and install dependencies:**
+###  API Guardrails & Reliability
+*   **Rate Limiting:** Guarded via `express-rate-limit` to neutralize brute force and DDoS vectors:
+    *   `Login Route`: Max 10 requests / 15 minutes / IP
+    *   `Submission Route`: Max 20 requests / 15 minutes / IP (strategically placed *after* authentication to prevent anonymous IP spoofing).
+*   **Fail-Safe Global Middlewares:** Catch-all Express middleware handles asynchronous propagation errors, automated Multer binary failures, missing authentication hooks (401), invalid permissions (403), and unexpected runtime errors (500).
+
+---
+
+##  Database Architecture & Audit Logging
+
+The platform maintains strong entity schemas using **Mongoose References** across four primary data models:
+*   **User:** Manages system credentials, security hooks, and roles (`admin`, `operator`).
+*   **Submission:** Tracks global pipeline jobs. Status transitions sequentially through: `pending` ➔ `processing` ➔ `completed` ➔ `failed`.
+*   **Output:** Isolated documents connected directly to an parent Submission ID tracking discrete outputs (`completed`, `failed`).
+*   **Audit Log:** Immutable ledger recording system actions (`User ID`, `Action Name`, `Resource Type`, `Target Resource ID`, and a comprehensive JSON metadata `Details` field). **Strictly Admin-Only accessible.**
+
+---
+
+##  Installation & Setup
+
+### Prerequisites
+*   Node.js (v18+ recommended)
+*   MongoDB (Local instance or Atlas connection string)
+*   Google Gemini API Key
+
+### Environment Variables
+Create a `.env` file in the root directory:
+```env
+PORT=5000
+MONGO_URI=mongodb://localhost:27017/ai-content-engine
+JWT_SECRET=your_super_secure_jwt_secret_key_here
+GEMINI_API_KEY=your_gemini_api_key_here
+NODE_ENV=production
+```
+
+### Installation Steps
+1. Clone the repository:
    ```bash
-   git clone https://github.com
-   cd SIH26154-Backend
+   git clone https://github.com/NexGen6/SIH26154-Backend.git
+   cd ai-content-engine
+   ```
+2. Install dependencies:
+   ```bash
    npm install
    ```
-
-2. **Configure Environment Variables (`.env`):**  
-   Create a `.env` file in the root directory and define the following variables required by the engine:
-   *   `PORT` — The network port for the Express application server.
-   *   `MONGO_URI` — Connection string for your MongoDB database instances.
-   *   `JWT_SECRET` — Secure key signature utilized for enterprise RBAC session verification.
-   *   `GEMINI_API_KEY` — API key credential granting access to the Google Gemini AI orchestrator.
+3. Start the application:
+   ```bash
+   # Production mode
+   npm start
+   
+   # Development mode (with nodemon)
+   npm run dev
+   ```
 
 ---
-
-###  Running the Server
-
-Execute the pipeline in your environment using the appropriate script configurations:
-
-*   **Development Mode (with hot-reloading):**
-    ```bash
-    npm run dev
-    ```
-*   **Production Deployment:**
-    ```bash
-    npm start
-    ```
