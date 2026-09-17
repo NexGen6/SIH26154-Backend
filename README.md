@@ -74,7 +74,7 @@ NODE_ENV=production
 1. Clone the repository:
    ```bash
    git clone https://github.com/NexGen6/SIH26154-Backend.git
-   cd ai-content-engine
+   cd SIH26154-Backend
    ```
 2. Install dependencies:
    ```bash
