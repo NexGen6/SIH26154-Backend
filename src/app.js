@@ -11,7 +11,7 @@ const errorMiddleware = require('./middlewares/error.middleware');
 const app = express();
 
 app.use(cors({
-     origin: 'https://sih-26154-frontend-final.vercel.app',
+     origin: 'https://sih-26154-frontend-final-6pftzncuz-nex-gen26.vercel.app',
      credentials: true
 }));
 
